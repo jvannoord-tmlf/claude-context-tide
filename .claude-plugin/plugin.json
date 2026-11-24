@@ -1,6 +1,6 @@
 {
   "name": "context-tide",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "A backdrop tide that rises and warms as the context window fills.",
   "author": { "name": "jvannoord-tmlf" },
   "license": "MIT",

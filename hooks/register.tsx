@@ -48,8 +48,8 @@ function scene(raw: number): string {
     `@media (prefers-reduced-motion: reduce){.tide{animation:none}}` +
     `</style>` +
     `<g class="tide">` +
-    `<path d="${body}" fill="${fill}" fill-opacity="0.15"/>` +
-    `<path d="${top}" fill="none" stroke="${crest}" stroke-opacity="0.34" stroke-width="3"/>` +
+    `<path d="${body}" fill="${fill}" fill-opacity="0.45"/>` +
+    `<path d="${top}" fill="none" stroke="${crest}" stroke-opacity="0.85" stroke-width="3"/>` +
     `</g>` +
     `</svg>`
   )
@@ -58,14 +58,16 @@ function scene(raw: number): string {
 export const register: Register = on => {
   on('session.start', async ($, e, next) => {
     try {
-      const set = await $.theme.set({ backdrop: { scene: SCENE } })
+      const set = await $.theme.set({ backdrop: { scene: SCENE, glass: { blur: 4, opacity: 0.3 } } })
       if (!set.isDrawn) $.ui.status(set.reason)
     } catch (err) {
       $.ui.log(`context-tide: theme set failed: ${String(err)}`)
     }
     try {
       const u = await $.session.usage()
-      await update($, pct, () => u?.context?.percent ?? 0)
+      const level = u?.context?.percent ?? 0
+      await update($, pct, () => level)
+      $.ui.status(`tide ${Math.round(level)}%`)
     } catch (err) {
       $.ui.log(`context-tide: usage read failed: ${String(err)}`)
     }
@@ -74,11 +76,14 @@ export const register: Register = on => {
   })
 
   // Pushed after each turn (and when a rate-limit window moves): re-read the
-  // window and write the new fill level, which redraws the Backdrop.
+  // window and write the new fill level, which redraws the Backdrop and the
+  // status-line readout.
   on('session.measure', async ($, e, next) => {
     try {
       const u = await $.session.usage()
-      await update($, pct, () => u?.context?.percent ?? 0)
+      const level = u?.context?.percent ?? 0
+      await update($, pct, () => level)
+      $.ui.status(`tide ${Math.round(level)}%`)
     } catch (err) {
       $.ui.log(`context-tide: usage read failed: ${String(err)}`)
     }

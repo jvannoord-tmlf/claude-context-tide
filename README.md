@@ -5,7 +5,8 @@ bottom of the app and fills it as your context window fills. It reads the live
 context percentage after every turn and redraws the backdrop, so the water line
 rises as the session grows and the color shifts from calm blue to amber past
 60% and to red past 85%. It is a quiet, at-a-glance signal that you are getting
-close to auto-compact, without a number to read.
+close to auto-compact. For the exact figure, the status line reads
+`tide N%` and updates after every turn.
 
 The motion is a slow drifting wave at the water line, drawn at low opacity so
 the conversation stays readable, and it holds still when the system is set to
@@ -15,7 +16,8 @@ reduce motion.
 
 - `session.start` registers the backdrop scene and seeds the current level.
 - `session.measure` (fires after each turn) reads `$.session.usage()` and writes
-  the context percentage into session state.
+  the context percentage into session state and onto the status line
+  (`tide N%`).
 - A `ui.render` hook on the `Backdrop` component draws the tide from that state,
   so the fill updates whenever the level changes.
 
