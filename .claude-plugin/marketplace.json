@@ -1,0 +1,5 @@
+{
+  "name": "tmlf-mods",
+  "owner": { "name": "jvannoord-tmlf" },
+  "plugins": [{ "name": "context-tide", "source": "./" }]
+}
